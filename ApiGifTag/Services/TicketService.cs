@@ -24,7 +24,7 @@ public class TicketService
             }
         }
 
-        bitmap = AddAirlineLogo(bitmap, ticket.Airline.AirlineCode);
+        bitmap = AddAirlineLogo(bitmap, ticket);
 
         var fileName = $"{Guid.NewGuid()}.png";
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
@@ -53,11 +53,11 @@ public class TicketService
         };
     }
 
-    private Bitmap AddAirlineLogo(Bitmap bitmap, string airlineCode)
+    private Bitmap AddAirlineLogo(Bitmap bitmap, Ticket ticket)
     {
-        if (!string.IsNullOrEmpty(airlineCode))
+        if (ticket.Airline != null && !string.IsNullOrEmpty(ticket.Airline.AirlineCode))
         {
-            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", airlineCode);
+            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", ticket.Airline.AirlineCode);
             Bitmap airlineBitmap = (Bitmap)Image.FromFile(airlineLogoImage); //load the image file
 
             Graphics gra = Graphics.FromImage(bitmap);

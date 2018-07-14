@@ -28,11 +28,21 @@ namespace ApiGifTag.Controllers
         {
             try
             {
-                _context.Add(new User
+                _context.Add(new GifTag.Database.Ticket
                 {
-                    EmailAddress = ticket.Email,
+                    FromName = ticket.From.PlaceName,
+                    AirlineCode = ticket.Airline?.AirlineCode,
                     FirstName = ticket.FirstName,
-                    LastName = ticket.LastName
+                    LastName = ticket.LastName,
+                    AirlineName = ticket.Airline?.AirlineName,
+                    ToCode = ticket.To?.PlaceId,
+                    ToName = ticket.To?.PlaceName,
+                    User = new User
+                    {
+                        EmailAddress = ticket.Email,
+                        FirstName = ticket.FirstName,
+                        LastName = ticket.LastName
+                    }
                 });
                 _context.SaveChanges();
                 var generatedTicket = _ticketService.Generate(ticket);
