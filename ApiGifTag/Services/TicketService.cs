@@ -24,7 +24,7 @@ public class TicketService
             }
         }
 
-        bitmap = AddAirlineLogo(bitmap, ticket.AirlineLogo);
+        bitmap = AddAirlineLogo(bitmap, ticket.Airline.AirlineCode);
 
         var fileName = $"{Guid.NewGuid()}.png";
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
@@ -36,7 +36,6 @@ public class TicketService
             LastName = ticket.LastName,
             Email = ticket.Email,
             Airline = ticket.Airline,
-            AirlineLogo = ticket.AirlineLogo,
             BoardingTime = ticket.BoardingTime,
             Class = ticket.Class,
             FlightDate = ticket.FlightDate,
@@ -54,11 +53,11 @@ public class TicketService
         };
     }
 
-    private Bitmap AddAirlineLogo(Bitmap bitmap, string airlineLogo)
+    private Bitmap AddAirlineLogo(Bitmap bitmap, string airlineCode)
     {
-        if (!string.IsNullOrEmpty(airlineLogo))
+        if (!string.IsNullOrEmpty(airlineCode))
         {
-            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", airlineLogo);
+            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", airlineCode);
             Bitmap airlineBitmap = (Bitmap)Image.FromFile(airlineLogoImage); //load the image file
 
             Graphics gra = Graphics.FromImage(bitmap);

@@ -7,8 +7,7 @@
     public Airport To { get; set; }
     public string FlightDate { get; set; }
     public string BoardingTime { get; set; }
-    public string Airline { get; set; }
-    public string AirlineLogo { get; set; }
+    public Airline Airline { get; set; }
     public string FlightNumber { get; set; }
     public string Gate { get; set; }
     public string Seat { get; set; }
