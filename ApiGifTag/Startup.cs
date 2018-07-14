@@ -26,7 +26,7 @@ namespace ApiGifTag
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(options => options.UseSqlServer(Settings.Database));
+            services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("GiftagDb")));
             services.AddCors();
             services.AddMvc();
         }

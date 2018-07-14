@@ -43,25 +43,32 @@ namespace ApiGifTag.Controllers
         [Route("airlines")]
         public JsonResult GetAll()
         {
-            var resultList = new List<dynamic>();
-            var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines");
-
-            var fileNames = Directory.EnumerateFiles(directoryPath);
-
-            foreach (var file in fileNames)
+            try
             {
-                var fileName = file.Substring(file.LastIndexOf("\\") + 1);
-                var airlineName = FormatFileName(fileName);
+                var resultList = new List<dynamic>();
+                var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines");
 
-                resultList.Add(new
+                var fileNames = Directory.EnumerateFiles(directoryPath);
+
+                foreach (var file in fileNames)
                 {
-                    airlineName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(airlineName),
-                    airlineLogo = $"/AirlineLogo/{fileName}",
-                    airlineCode = fileName
-                });
-            }
+                    var fileName = file.Substring(file.LastIndexOf("\\") + 1);
+                    var airlineName = FormatFileName(fileName);
 
-            return Json(resultList);
+                    resultList.Add(new
+                    {
+                        airlineName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(airlineName),
+                        airlineLogo = $"/AirlineLogo/{fileName}",
+                        airlineCode = fileName
+                    });
+                }
+
+                return Json(resultList);
+            }
+            catch (Exception ex)
+            {
+                return Json(ex);
+            }
         }
 
         private string FormatFileName(string airlineName)

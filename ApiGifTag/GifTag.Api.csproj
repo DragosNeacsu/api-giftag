@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Content\GeneratedTickets\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
