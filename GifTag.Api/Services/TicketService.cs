@@ -9,7 +9,7 @@ public class TicketService
 {
     public TicketViewModel Generate(Ticket ticket)
     {
-        var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "TicketTemplate", $"template_{ticket.Template}.png");
+        var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "TicketTemplate", ticket.Template);
 
         Bitmap bitmap = (Bitmap)Image.FromFile(templatePath);//load the image file
 
