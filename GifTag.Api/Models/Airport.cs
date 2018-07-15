@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-public class Airport
+public class AirportDto
 {
     public string PlaceId { get; set; }
     public string PlaceName { get; set; }

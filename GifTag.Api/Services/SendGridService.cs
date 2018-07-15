@@ -4,19 +4,19 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-public class SendGridService
+public class EmailService : IEmailService
 {
     private SendGridClient _client;
-    public SendGridService()
+    public EmailService()
     {
         _client = new SendGridClient(Settings.SendGridKey);
     }
-    public void SendEmail(Email email)
+    public void SendEmail(EmailDto email)
     {
         ExecuteAsync(email).Wait();
     }
 
-    public async Task ExecuteAsync(Email email)
+    private async Task ExecuteAsync(EmailDto email)
     {
         var from = new EmailAddress(Settings.FromEmail, Settings.FromName);
         var to = new EmailAddress(email.EmailAddress);

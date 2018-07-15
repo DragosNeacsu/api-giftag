@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Serialization;
 
 namespace ApiGifTag
 {
@@ -28,7 +29,13 @@ namespace ApiGifTag
         {
             services.AddDbContext<DataContext>(options => options.UseSqlServer(Configuration.GetConnectionString("GiftagDb")));
             services.AddCors();
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(opts =>
+            {
+                opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
+
+            services.AddTransient<IEmailService, EmailService>();
+            services.AddTransient<ITicketService, TicketService>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

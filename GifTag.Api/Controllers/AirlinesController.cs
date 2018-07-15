@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 
-namespace ApiGifTag.Controllers
+namespace GifTag.Api.Controllers
 {
     public class AirlinesController : Controller
     {
@@ -16,7 +16,7 @@ namespace ApiGifTag.Controllers
             {
                 return Json(new NullReferenceException("Keyword cannot be null or empty"));
             }
-            var resultList = new List<Airline>();
+            var resultList = new List<AirlineDto>();
             var directoryPath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines");
 
             var fileNames = Directory.EnumerateFiles(directoryPath, $"*{keyword.ToLower()}*.*", SearchOption.TopDirectoryOnly);
@@ -27,7 +27,7 @@ namespace ApiGifTag.Controllers
                 var airlineName = FormatFileName(fileName);
                 if (airlineName.ToLower().Contains(keyword.ToLower()))
                 {
-                    resultList.Add(new Airline
+                    resultList.Add(new AirlineDto
                     {
                         AirlineName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(airlineName),
                         AirlineLogo = $"/AirlineLogo/{fileName}",

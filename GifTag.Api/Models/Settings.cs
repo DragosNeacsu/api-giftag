@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-public class Settings
+﻿public class Settings
 {
     public static string PaypalUrl => "https://www.sandbox.paypal.com/cgi-bin/webscr";
     public static string PaypalEmail => "tickets.giftag-facilitator@gmail.com";

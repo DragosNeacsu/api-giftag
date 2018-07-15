@@ -1,17 +1,25 @@
-﻿public class Ticket
+﻿public class TicketDto
 {
+    public string Id { get; set; }
     public string FirstName { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
-    public Airport From { get; set; }
-    public Airport To { get; set; }
+    public AirportDto From { get; set; }
+    public AirportDto To { get; set; }
     public string FlightDate { get; set; }
     public string BoardingTime { get; set; }
-    public Airline Airline { get; set; }
+    public AirlineDto Airline { get; set; }
     public string FlightNumber { get; set; }
     public string Gate { get; set; }
     public string Seat { get; set; }
     public string Class { get; set; }
     public string Language { get; set; }
     public string Template { get; set; }
+    public GeneratedTicket GeneratedTicket { get; set; }
+}
+
+public class GeneratedTicket
+{
+    public string FileName { get; set; }
+    public string Path { get; set; }
 }

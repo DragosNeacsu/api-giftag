@@ -7,17 +7,17 @@ using System.IO;
 using System.Net;
 using System.Text;
 
-namespace ApiGifTag.Controllers
+namespace GifTag.Api.Controllers
 {
     [Route("Payment")]
     public class PaymentController : Controller
     {
-        private TicketService _ticketService;
-        private SendGridService _sendGridService;
-        public PaymentController()
+        private ITicketService _ticketService;
+        private IEmailService _sendGridService;
+        public PaymentController(ITicketService ticketService, IEmailService emailService)
         {
-            _ticketService = new TicketService();
-            _sendGridService = new SendGridService();
+            _ticketService = ticketService;
+            _sendGridService = emailService;
         }
 
         [HttpGet]
@@ -73,14 +73,14 @@ namespace ApiGifTag.Controllers
 
             var obj = JsonConvert.DeserializeObject<dynamic>(Uri.UnescapeDataString(response["custom"]));
 
-            var email = new Email
+            var email = new EmailDto
             {
                 EmailAddress = obj.email,
                 Body = "to do",
                 Subject = "Your fancy boarding pass",
-                Attachments = new List<EmailAttachment>
+                Attachments = new List<EmailAttachmentDto>
                 {
-                    new EmailAttachment {
+                    new EmailAttachmentDto {
                         Name = "boarding_pass.png",
                         Path =  Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", obj.file.Value)
                     }

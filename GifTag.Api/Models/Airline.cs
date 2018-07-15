@@ -1,4 +1,4 @@
-﻿public class Airline
+﻿public class AirlineDto
 {
     public string AirlineName { get; set; }
     public string AirlineLogo { get; set; }

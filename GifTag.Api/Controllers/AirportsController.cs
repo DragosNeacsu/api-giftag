@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace ApiGifTag.Controllers
+namespace GifTag.Api.Controllers
 {
     [Route("airports")]
     public class AirportsController : Controller
@@ -18,7 +19,7 @@ namespace ApiGifTag.Controllers
             WebRequest request = HttpWebRequest.Create(url);
             WebResponse response = request.GetResponse();
             StreamReader reader = new StreamReader(response.GetResponseStream());
-            var responseJson = JsonConvert.DeserializeObject<Airport>(reader.ReadToEnd());
+            var responseJson = JsonConvert.DeserializeObject<List<AirportDto>>(reader.ReadToEnd());
 
             return Json(responseJson);
         }

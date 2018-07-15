@@ -1,17 +1,25 @@
-﻿using System;
+﻿using GifTag.Database;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Net;
-using System.Net.Mail;
 
-public class TicketService
+public class TicketService : ITicketService
 {
-    public TicketViewModel Generate(Ticket ticket)
+    private readonly DataContext _context;
+    public TicketService(DataContext context)
+    {
+        _context = context;
+    }
+
+    public TicketDto Generate(TicketDto ticket)
     {
         var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "TicketTemplate", ticket.Template);
+        if (!File.Exists(templatePath)) {
+            throw new FileNotFoundException($"Template {ticket.Template} does not exist");
+        }
 
-        Bitmap bitmap = (Bitmap)Image.FromFile(templatePath);//load the image file
+        Bitmap bitmap = (Bitmap)Image.FromFile(templatePath);
 
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
@@ -30,35 +38,58 @@ public class TicketService
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
         bitmap.Save(filePath, ImageFormat.Png);
 
-        return new TicketViewModel
+        ticket.GeneratedTicket = new GeneratedTicket
         {
-            FirstName = ticket.FirstName,
-            LastName = ticket.LastName,
-            Email = ticket.Email,
-            Airline = ticket.Airline,
-            BoardingTime = ticket.BoardingTime,
-            Class = ticket.Class,
-            FlightDate = ticket.FlightDate,
-            FlightNumber = ticket.FlightNumber,
-            From = ticket.From,
-            Gate = ticket.Gate,
-            Language = ticket.Language,
-            To = ticket.To,
-            Seat = ticket.Seat,
-            GeneratedTicket = new GeneratedTicket
-            {
-                FileName = fileName,
-                Path = $"/GeneratedTickets/{fileName}"
-            }
+            FileName = fileName,
+            Path = $"/GeneratedTickets/{fileName}"
         };
+        ticket.Id = SaveToDb(ticket).Id.ToString();
+        return ticket;
     }
 
-    private Bitmap AddAirlineLogo(Bitmap bitmap, Ticket ticket)
+    private Ticket SaveToDb(TicketDto ticketDto)
+    {
+        var ticket = new Ticket
+        {
+            FromName = ticketDto.From.PlaceName,
+            AirlineCode = ticketDto.Airline?.AirlineCode,
+            FirstName = ticketDto.FirstName,
+            LastName = ticketDto.LastName,
+            AirlineName = ticketDto.Airline?.AirlineName,
+            ToCode = ticketDto.To?.PlaceId,
+            ToName = ticketDto.To?.PlaceName,
+            BoardingTime = ticketDto.BoardingTime,
+            Class = ticketDto.Class,
+            FlightDate = ticketDto.FlightDate,
+            FlightNumber = ticketDto.FlightNumber,
+            FromCode = ticketDto.From?.PlaceId,
+            Gate = ticketDto.Gate,
+            Language = ticketDto.Language,
+            Seat = ticketDto.Seat,
+            Template = ticketDto.Template,
+            User = new User
+            {
+                EmailAddress = ticketDto.Email,
+                FirstName = "Unknown",
+                LastName = "Unknown"
+            },
+            IsPaid = false
+        };
+        _context.Tickets.Add(ticket);
+        _context.SaveChanges();
+        return ticket;
+    }
+
+    private Bitmap AddAirlineLogo(Bitmap bitmap, TicketDto ticket)
     {
         if (ticket.Airline != null && !string.IsNullOrEmpty(ticket.Airline.AirlineCode))
         {
             var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", ticket.Airline.AirlineCode);
-            Bitmap airlineBitmap = (Bitmap)Image.FromFile(airlineLogoImage); //load the image file
+            if (!File.Exists(airlineLogoImage))
+            {
+                throw new FileNotFoundException($"Airline logo {ticket.Airline.AirlineCode} does not exist");
+            }
+            Bitmap airlineBitmap = (Bitmap)Image.FromFile(airlineLogoImage);
 
             Graphics gra = Graphics.FromImage(bitmap);
             gra.DrawImage(airlineBitmap, new Point(70, 70));

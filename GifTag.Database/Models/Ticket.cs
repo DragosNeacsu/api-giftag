@@ -25,6 +25,7 @@ namespace GifTag.Database
         public string Class { get; set; }
         public string Language { get; set; }
         public string Template { get; set; }
+        public bool IsPaid { get; set; }
     }
 }
 

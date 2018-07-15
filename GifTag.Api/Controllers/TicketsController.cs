@@ -1,72 +1,45 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using GifTag.Database;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 
-namespace ApiGifTag.Controllers
+namespace GifTag.Api.Controllers
 {
     [Route("Ticket")]
     public class TicketsController : Controller
     {
-        private TicketService _ticketService;
-        private SendGridService _sendGridService;
-        private readonly DataContext _context;
+        private ITicketService _ticketService;
 
-        public TicketsController(DataContext context)
+        public TicketsController(ITicketService ticketService)
         {
-            _ticketService = new TicketService();
-            _sendGridService = new SendGridService();
-            _context = context;
+            _ticketService = ticketService;
         }
 
         [HttpPost]
-        public JsonResult Generate([FromBody]Ticket ticket)
+        public JsonResult Generate([FromBody]TicketDto ticket)
         {
             try
             {
-                _context.Add(new GifTag.Database.Ticket
-                {
-                    FromName = ticket.From.PlaceName,
-                    AirlineCode = ticket.Airline?.AirlineCode,
-                    FirstName = ticket.FirstName,
-                    LastName = ticket.LastName,
-                    AirlineName = ticket.Airline?.AirlineName,
-                    ToCode = ticket.To?.PlaceId,
-                    ToName = ticket.To?.PlaceName,
-                    User = new User
-                    {
-                        EmailAddress = ticket.Email,
-                        FirstName = ticket.FirstName,
-                        LastName = ticket.LastName
-                    }
-                });
-                _context.SaveChanges();
                 var generatedTicket = _ticketService.Generate(ticket);
-                var email = new Email
-                {
-                    EmailAddress = generatedTicket.Email,
-                    Body = "to do",
-                    Subject = "Your fancy boarding pass",
-                    Attachments = new List<EmailAttachment>
-                {
-                    new EmailAttachment {
-                        Name = "boarding_pass.png",
-                        Path = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", generatedTicket.GeneratedTicket.FileName)
-                    }
-                }
-                };
-                _sendGridService.SendEmail(email);
-                return Json(generatedTicket);
+
+                return Json(new ApiResponse(new { generatedTicketId = Converter.ToBase64(generatedTicket.Id) }));
             }
             catch (Exception ex)
             {
-                return Json(ex);
+                Response.StatusCode = ex.GetType() == typeof(FileNotFoundException) ? 400 : 500;
+                return Json(new ApiResponse(null, ex.Message));
             }
         }
+    }
+
+    public class ApiResponse
+    {
+        public ApiResponse(dynamic data, dynamic error = null)
+        {
+            Data = data;
+            Error = error;
+        }
+        public bool IsSuccess => Error == null;
+        public dynamic Data { get; set; }
+        public dynamic Error { get; set; }
     }
 }
