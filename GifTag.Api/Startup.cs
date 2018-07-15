@@ -39,7 +39,13 @@ namespace ApiGifTag
             }
 
             app.UseCors(
-                options => options.WithOrigins("http://localhost:4200").AllowAnyMethod()
+                options => options.AllowAnyMethod().AllowAnyHeader()
+                    .WithOrigins(
+                    "http://localhost:4200",
+                    "http://pre.giftag.eu",
+                    "https://pre.giftag.eu",
+                    "http://giftag.eu",
+                    "https://giftag.eu")
             );
 
             app.UseStaticFiles(new StaticFileOptions

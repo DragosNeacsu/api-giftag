@@ -23,6 +23,7 @@ namespace ApiGifTag.Controllers
             _sendGridService = new SendGridService();
             _context = context;
         }
+
         [HttpPost]
         public JsonResult Generate([FromBody]Ticket ticket)
         {
