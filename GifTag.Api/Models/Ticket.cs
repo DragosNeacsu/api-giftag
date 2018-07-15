@@ -15,11 +15,5 @@
     public string Class { get; set; }
     public string Language { get; set; }
     public string Template { get; set; }
-    public GeneratedTicket GeneratedTicket { get; set; }
-}
-
-public class GeneratedTicket
-{
-    public string FileName { get; set; }
-    public string Path { get; set; }
+    public string GeneratedTicket { get; set; }
 }

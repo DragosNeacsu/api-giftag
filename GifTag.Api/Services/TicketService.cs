@@ -15,7 +15,8 @@ public class TicketService : ITicketService
     public TicketDto Generate(TicketDto ticket)
     {
         var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "TicketTemplate", ticket.Template);
-        if (!File.Exists(templatePath)) {
+        if (!File.Exists(templatePath))
+        {
             throw new FileNotFoundException($"Template {ticket.Template} does not exist");
         }
 
@@ -38,13 +39,22 @@ public class TicketService : ITicketService
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
         bitmap.Save(filePath, ImageFormat.Png);
 
-        ticket.GeneratedTicket = new GeneratedTicket
-        {
-            FileName = fileName,
-            Path = $"/GeneratedTickets/{fileName}"
-        };
+        ticket.GeneratedTicket = fileName;
         ticket.Id = SaveToDb(ticket).Id.ToString();
         return ticket;
+    }
+
+    public Ticket GetById(int ticketId)
+    {
+        var ticket= _context.Tickets.Find(ticketId);
+        _context.Entry(ticket).Reference(r => r.User).Load();
+        return ticket;
+    }
+
+    public void SeTicketAsPaid(int ticketId) {
+        var ticket = _context.Tickets.Find(ticketId);
+        ticket.IsPaid = true;
+        _context.SaveChanges();
     }
 
     private Ticket SaveToDb(TicketDto ticketDto)
@@ -67,6 +77,7 @@ public class TicketService : ITicketService
             Language = ticketDto.Language,
             Seat = ticketDto.Seat,
             Template = ticketDto.Template,
+            GeneratedTicket = ticketDto.GeneratedTicket,
             User = new User
             {
                 EmailAddress = ticketDto.Email,

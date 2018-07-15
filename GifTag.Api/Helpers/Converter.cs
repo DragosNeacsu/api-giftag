@@ -14,5 +14,10 @@ namespace GifTag.Api
         {
             return Convert.ToBase64String(Encoding.ASCII.GetBytes(input));
         }
+
+        public static string FromBase64(string input)
+        {
+            return Encoding.ASCII.GetString(Convert.FromBase64String(input));
+        }
     }
 }

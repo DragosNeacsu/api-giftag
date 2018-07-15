@@ -21,16 +21,9 @@ namespace GifTag.Api.Controllers
         }
 
         [HttpGet]
-        public void PayWithPaypal(string email, string fileName)
+        public void PayWithPaypal(string generatedTicketId)
         {
-            var custom = JsonConvert.SerializeObject(
-                new
-                {
-                    email = email,
-                    file = fileName
-                });
-
-            var price = 1;
+            var price = 1.99;
             var builder = new StringBuilder();
             var uri = Request.GetDisplayUrl().Split('?')[0];
             builder.Append(Settings.PaypalUrl);
@@ -42,7 +35,7 @@ namespace GifTag.Api.Controllers
             builder.Append($"&amount_1={price}");
             builder.Append("&quantity_1=1");
             builder.Append("&currency_code=GBP");
-            builder.Append($"&custom={custom}");
+            builder.Append($"&custom={generatedTicketId}");
             builder.Append($"&return={uri}/Return");
             builder.Append($"&cancel_return={uri}/Cancel");
 
@@ -70,19 +63,23 @@ namespace GifTag.Api.Controllers
             // Do the request to PayPal and get the response
             StreamReader reader = new StreamReader(req.GetResponse().GetResponseStream());
             var response = ProcessPaypalResponse(reader);
+            if (response.ContainsKey("error"))
+            {
+                throw new Exception(response["error"]);
+            }
 
-            var obj = JsonConvert.DeserializeObject<dynamic>(Uri.UnescapeDataString(response["custom"]));
-
+            var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(Uri.UnescapeDataString(response["custom"]))));
+            _ticketService.SeTicketAsPaid(ticket.Id);
             var email = new EmailDto
             {
-                EmailAddress = obj.email,
+                EmailAddress = ticket.User.EmailAddress,
                 Body = "to do",
                 Subject = "Your fancy boarding pass",
                 Attachments = new List<EmailAttachmentDto>
                 {
                     new EmailAttachmentDto {
                         Name = "boarding_pass.png",
-                        Path =  Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", obj.file.Value)
+                        Path =  Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", ticket.GeneratedTicket)
                     }
                 }
             };
