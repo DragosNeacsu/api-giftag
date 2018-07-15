@@ -1,4 +1,5 @@
-﻿using GifTag.Database;
+﻿using GifTag.Api.Points;
+using GifTag.Database;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -19,17 +20,17 @@ public class TicketService : ITicketService
         {
             throw new FileNotFoundException($"Template {ticket.Template} does not exist");
         }
-
+        var points = PointFactory.Get(ticket.Template);
         Bitmap bitmap = (Bitmap)Image.FromFile(templatePath);
 
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
             using (Font arialFont = new Font("Arial", 10))
             {
-                graphics.DrawString(ticket.FirstName, arialFont, Brushes.Black, new PointF(500f, 10f));
-                graphics.DrawString(ticket.LastName, arialFont, Brushes.Black, new PointF(500f, 50f));
-                graphics.DrawString(ticket.FromName, arialFont, Brushes.Black, new PointF(500f, 100f));
-                graphics.DrawString(ticket.ToName, arialFont, Brushes.Black, new PointF(500f, 150f));
+                graphics.DrawString(ticket.FirstName, arialFont, Brushes.Black, points.FirstName);
+                graphics.DrawString(ticket.LastName, arialFont, Brushes.Black, points.LastName);
+                graphics.DrawString(ticket.FromName, arialFont, Brushes.Black, points.FromName);
+                graphics.DrawString(ticket.ToName, arialFont, Brushes.Black, points.ToName);
             }
         }
 
@@ -43,13 +44,14 @@ public class TicketService : ITicketService
 
     public Ticket GetById(int ticketId)
     {
-        var ticket= _context.Tickets.Find(ticketId);
+        var ticket = _context.Tickets.Find(ticketId);
         _context.Entry(ticket).Reference(r => r.User).Load();
         return ticket;
     }
 
-    public void Update(Ticket ticket) {
-        if(_context.Tickets.Find(ticket.Id) == null)
+    public void Update(Ticket ticket)
+    {
+        if (_context.Tickets.Find(ticket.Id) == null)
         {
             throw new NullReferenceException($"Ticket {ticket.Id} was not found");
         }
@@ -126,3 +128,4 @@ public class TicketService : ITicketService
         return value.ToString("yyyyMMddHHmm");
     }
 }
+
