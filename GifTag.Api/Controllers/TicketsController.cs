@@ -19,7 +19,7 @@ namespace GifTag.Api.Controllers
         {
             try
             {
-                var generatedTicket = _ticketService.Generate(ticket);
+                var generatedTicket = _ticketService.Save(ticket);
 
                 return Json(new ApiResponse(new { generatedTicketId = Converter.ToBase64(generatedTicket.Id) }));
             }

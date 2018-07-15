@@ -12,7 +12,7 @@ public class TicketService : ITicketService
         _context = context;
     }
 
-    public TicketDto Generate(TicketDto ticket)
+    public string Generate(Ticket ticket)
     {
         var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "TicketTemplate", ticket.Template);
         if (!File.Exists(templatePath))
@@ -28,8 +28,8 @@ public class TicketService : ITicketService
             {
                 graphics.DrawString(ticket.FirstName, arialFont, Brushes.Black, new PointF(500f, 10f));
                 graphics.DrawString(ticket.LastName, arialFont, Brushes.Black, new PointF(500f, 50f));
-                graphics.DrawString(ticket.From.PlaceName, arialFont, Brushes.Black, new PointF(500f, 100f));
-                graphics.DrawString(ticket.To.PlaceName, arialFont, Brushes.Black, new PointF(500f, 150f));
+                graphics.DrawString(ticket.FromName, arialFont, Brushes.Black, new PointF(500f, 100f));
+                graphics.DrawString(ticket.ToName, arialFont, Brushes.Black, new PointF(500f, 150f));
             }
         }
 
@@ -38,10 +38,7 @@ public class TicketService : ITicketService
         var fileName = $"{Guid.NewGuid()}.png";
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
         bitmap.Save(filePath, ImageFormat.Png);
-
-        ticket.GeneratedTicket = fileName;
-        ticket.Id = SaveToDb(ticket).Id.ToString();
-        return ticket;
+        return fileName;
     }
 
     public Ticket GetById(int ticketId)
@@ -51,14 +48,30 @@ public class TicketService : ITicketService
         return ticket;
     }
 
-    public void SeTicketAsPaid(int ticketId) {
-        var ticket = _context.Tickets.Find(ticketId);
-        ticket.IsPaid = true;
+    public void Update(Ticket ticket) {
+        if(_context.Tickets.Find(ticket.Id) == null)
+        {
+            throw new NullReferenceException($"Ticket {ticket.Id} was not found");
+        }
         _context.SaveChanges();
     }
 
-    private Ticket SaveToDb(TicketDto ticketDto)
+    public Ticket Save(TicketDto ticketDto)
     {
+        var templatePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "TicketTemplate", ticketDto.Template);
+        if (!File.Exists(templatePath))
+        {
+            throw new FileNotFoundException($"Template {ticketDto.Template} does not exist");
+        }
+        if (ticketDto.Airline != null)
+        {
+            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", ticketDto.Airline.AirlineCode);
+            if (!File.Exists(airlineLogoImage))
+            {
+                throw new FileNotFoundException($"Airline logo {ticketDto.Airline.AirlineCode} does not exist");
+            }
+        }
+
         var ticket = new Ticket
         {
             FromName = ticketDto.From.PlaceName,
@@ -91,14 +104,14 @@ public class TicketService : ITicketService
         return ticket;
     }
 
-    private Bitmap AddAirlineLogo(Bitmap bitmap, TicketDto ticket)
+    private Bitmap AddAirlineLogo(Bitmap bitmap, Ticket ticket)
     {
-        if (ticket.Airline != null && !string.IsNullOrEmpty(ticket.Airline.AirlineCode))
+        if (!string.IsNullOrEmpty(ticket.AirlineCode))
         {
-            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", ticket.Airline.AirlineCode);
+            var airlineLogoImage = Path.Combine(Directory.GetCurrentDirectory(), "Content", "Airlines", ticket.AirlineCode);
             if (!File.Exists(airlineLogoImage))
             {
-                throw new FileNotFoundException($"Airline logo {ticket.Airline.AirlineCode} does not exist");
+                throw new FileNotFoundException($"Airline logo {ticket.AirlineCode} does not exist");
             }
             Bitmap airlineBitmap = (Bitmap)Image.FromFile(airlineLogoImage);
 

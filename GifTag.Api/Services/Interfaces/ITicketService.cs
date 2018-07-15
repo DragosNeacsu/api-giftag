@@ -2,7 +2,8 @@
 
 public interface ITicketService
 {
-    TicketDto Generate(TicketDto ticket);
+    string Generate(Ticket ticket);
+    Ticket Save(TicketDto ticketDto);
     Ticket GetById(int ticketId);
-    void SeTicketAsPaid(int ticketId);
+    void Update(Ticket ticket);
 }

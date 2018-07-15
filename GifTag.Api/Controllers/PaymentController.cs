@@ -69,7 +69,9 @@ namespace GifTag.Api.Controllers
             }
 
             var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(Uri.UnescapeDataString(response["custom"]))));
-            _ticketService.SeTicketAsPaid(ticket.Id);
+            ticket.GeneratedTicket = _ticketService.Generate(ticket);
+            ticket.IsPaid = true;
+            _ticketService.Update(ticket);
             var email = new EmailDto
             {
                 EmailAddress = ticket.User.EmailAddress,
