@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 
 namespace GifTag.Api.Controllers
 {
@@ -64,7 +63,7 @@ namespace GifTag.Api.Controllers
                     });
                 }
 
-                return Json(resultList.First());
+                return Json(resultList);
             }
             catch (Exception ex)
             {
