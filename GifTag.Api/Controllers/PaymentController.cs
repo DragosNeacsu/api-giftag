@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace GifTag.Api.Controllers
 
         [HttpGet]
         [Route("return")]
-        public JsonResult Return()
+        public ActionResult Return()
         {
             var query = $"cmd=_notify-synch&tx={Request.Query["tx"]}&at={Settings.PaypalAuthToken}";
 
@@ -86,7 +87,7 @@ namespace GifTag.Api.Controllers
                 }
             };
             _sendGridService.SendEmail(email);
-            return Json(email);
+            return Redirect($"{Settings.UiUrl}gift/success");
         }
 
         private Dictionary<string, string> ProcessPaypalResponse(StreamReader reader)

@@ -4,6 +4,7 @@ namespace GifTag.Api.Points
 {
     public abstract class Points
     {
+        public abstract PointF Logo { get; }
         public abstract PointF FirstName { get; }
         public abstract PointF LastName { get; }
         public abstract PointF FromName { get; }
