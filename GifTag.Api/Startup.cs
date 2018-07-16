@@ -43,6 +43,8 @@ namespace ApiGifTag
                 options => options.AllowAnyMethod().AllowAnyHeader()
                     .WithOrigins(
                     "http://localhost:4200",
+                    "http://app.giftag.eu",
+                    "https://app.giftag.eu",
                     "http://pre.giftag.eu",
                     "https://pre.giftag.eu",
                     "http://giftag.eu",
