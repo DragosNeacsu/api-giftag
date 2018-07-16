@@ -88,7 +88,7 @@ namespace GifTag.Api.Controllers
                 }
             };
             _sendGridService.SendEmail(email);
-            return Redirect($"{Settings.UiUrl}gift/success?ticketId={base65TicketId}");
+            return Redirect($"{Settings.UiUrl}gift/success/{ticket.GeneratedTicket}");
         }
 
         private Dictionary<string, string> ProcessPaypalResponse(StreamReader reader)
