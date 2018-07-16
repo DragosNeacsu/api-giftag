@@ -27,7 +27,7 @@ namespace ApiGifTag
             {
                 opts.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
             });
-
+            services.AddDirectoryBrowser();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<ITicketService, TicketService>();
         }
@@ -56,6 +56,12 @@ namespace ApiGifTag
                 RequestPath = "/AirlineLogo"
             });
             app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets")),
+                RequestPath = "/GeneratedTickets"
+            });
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
             {
                 FileProvider = new PhysicalFileProvider(
                 Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets")),

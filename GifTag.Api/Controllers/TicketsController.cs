@@ -29,6 +29,14 @@ namespace GifTag.Api.Controllers
                 return Json(new ApiResponse(null, ex.Message));
             }
         }
+
+        [HttpGet]
+        [Route("{ticketId}")]
+        public JsonResult GetTicket(string ticketId)
+        {
+            var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(Uri.UnescapeDataString(ticketId))));
+            return Json(ticket);
+        }
     }
 
     public class ApiResponse

@@ -69,7 +69,8 @@ namespace GifTag.Api.Controllers
                 throw new Exception(response["error"]);
             }
 
-            var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(Uri.UnescapeDataString(response["custom"]))));
+            var base65TicketId = Uri.UnescapeDataString(response["custom"]);
+            var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(base65TicketId)));
             ticket.GeneratedTicket = _ticketService.Generate(ticket);
             ticket.IsPaid = true;
             _ticketService.Update(ticket);
@@ -87,7 +88,7 @@ namespace GifTag.Api.Controllers
                 }
             };
             _sendGridService.SendEmail(email);
-            return Redirect($"{Settings.UiUrl}gift/success");
+            return Redirect($"{Settings.UiUrl}gift/success?ticketId={base65TicketId}");
         }
 
         private Dictionary<string, string> ProcessPaypalResponse(StreamReader reader)
@@ -110,9 +111,11 @@ namespace GifTag.Api.Controllers
             return results;
         }
 
-        public void Cancel()
+        [HttpGet]
+        [Route("cancel")]
+        public ActionResult Cancel()
         {
-            var asd = Request;
+            return Redirect(Settings.UiUrl);
         }
     }
 }
