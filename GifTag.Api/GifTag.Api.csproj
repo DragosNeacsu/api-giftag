@@ -9,6 +9,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="Content\TicketTemplate\boarding-pass-1.png" />
+    <None Remove="Content\TicketTemplate\boarding-pass-2.png" />
+    <None Remove="Content\TicketTemplate\template_1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Content\TicketTemplate\boarding-pass-1.png" />
+    <Content Include="Content\TicketTemplate\boarding-pass-2.png" />
+    <Content Include="Content\TicketTemplate\template_1.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Content\GeneratedTickets\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
