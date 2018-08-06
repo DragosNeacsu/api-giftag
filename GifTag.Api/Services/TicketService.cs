@@ -30,6 +30,12 @@ public class TicketService : ITicketService
                 graphics.DrawString(ticket.FirstName, arialFont, Brushes.Black, points.FirstName);
                 graphics.DrawString(ticket.LastName, arialFont, Brushes.Black, points.LastName);
                 graphics.DrawString(ticket.FromName, arialFont, Brushes.Black, points.FromName);
+                graphics.DrawString(ticket.BoardingTime, arialFont, Brushes.Black, points.BoardingTime);
+                graphics.DrawString(ticket.FlightDate, arialFont, Brushes.Black, points.FlightDate);
+                graphics.DrawString(ticket.FlightNumber, arialFont, Brushes.Black, points.FlightNumber);
+                graphics.DrawString(ticket.Gate, arialFont, Brushes.Black, points.Gate);
+                graphics.DrawString(ticket.Seat, arialFont, Brushes.Black, points.Seat);
+                graphics.DrawString(ticket.Class, arialFont, Brushes.Black, points.Class);
                 graphics.DrawString(ticket.ToName, arialFont, Brushes.Black, points.ToName);
             }
         }

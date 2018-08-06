@@ -22,8 +22,14 @@ namespace GifTag.Api.Controllers
         }
 
         [HttpGet]
-        public void PayWithPaypal(string generatedTicketId)
+        public string PayWithPaypal(string generatedTicketId)
         {
+            var ticket = _ticketService.GetById(int.Parse(generatedTicketId));
+            ticket.GeneratedTicket = _ticketService.Generate(ticket);
+
+            return Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", ticket.GeneratedTicket);
+            //TODO make method void and remove above code
+            
             var price = 1.99;
             var builder = new StringBuilder();
             var uri = Request.GetDisplayUrl().Split('?')[0];
