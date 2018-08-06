@@ -96,7 +96,7 @@ public class TicketService : ITicketService
             AirlineName = ticketDto.Airline?.AirlineName,
             ToCode = ticketDto.To?.PlaceId,
             ToName = ticketDto.To?.PlaceName,
-            BoardingTime = ticketDto.BoardingTime,
+            FlightTime = ticketDto.FlightTime,
             Class = ticketDto.Class,
             FlightDate = ticketDto.FlightDate,
             FlightNumber = ticketDto.FlightNumber,

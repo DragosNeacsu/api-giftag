@@ -10,6 +10,7 @@ namespace GifTag.Api.Points
         public abstract PointF FromName { get; }
         public abstract PointF ToName { get; }
         public abstract PointF FlightDate { get; }
+        public abstract PointF FlightTime { get; }
         public abstract PointF BoardingTime { get; }
         public abstract PointF FlightNumber { get; }
         public abstract PointF Gate { get; }

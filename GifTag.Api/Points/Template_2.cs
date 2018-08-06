@@ -12,7 +12,7 @@ namespace GifTag.Api.Points
 
         public override PointF FlightDate => throw new System.NotImplementedException();
 
-        public override PointF BoardingTime => throw new System.NotImplementedException();
+        public override PointF FlightTime => throw new System.NotImplementedException();
 
         public override PointF FlightNumber => throw new System.NotImplementedException();
 
@@ -21,5 +21,7 @@ namespace GifTag.Api.Points
         public override PointF Seat => throw new System.NotImplementedException();
 
         public override PointF Class => throw new System.NotImplementedException();
+
+        public override PointF BoardingTime => throw new System.NotImplementedException();
     }
 }

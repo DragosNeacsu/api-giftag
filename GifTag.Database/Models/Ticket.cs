@@ -16,7 +16,7 @@ namespace GifTag.Database
         public string ToName { get; set; }
         public string ToCode { get; set; }
         public string FlightDate { get; set; }
-        public string BoardingTime { get; set; }
+        public string FlightTime { get; set; }
         public string AirlineName { get; set; }
         public string AirlineCode { get; set; }
         public string FlightNumber { get; set; }

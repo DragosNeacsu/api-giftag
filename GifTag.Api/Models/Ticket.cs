@@ -7,7 +7,7 @@
     public AirportDto From { get; set; }
     public AirportDto To { get; set; }
     public string FlightDate { get; set; }
-    public string BoardingTime { get; set; }
+    public string FlightTime { get; set; }
     public AirlineDto Airline { get; set; }
     public string FlightNumber { get; set; }
     public string Gate { get; set; }
