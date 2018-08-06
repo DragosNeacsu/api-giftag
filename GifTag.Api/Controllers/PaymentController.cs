@@ -24,7 +24,7 @@ namespace GifTag.Api.Controllers
         [HttpGet]
         public string PayWithPaypal(string generatedTicketId)
         {
-            var ticket = _ticketService.GetById(int.Parse(generatedTicketId));
+            var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(generatedTicketId)));
             ticket.GeneratedTicket = _ticketService.Generate(ticket);
 
             return Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", ticket.GeneratedTicket);
