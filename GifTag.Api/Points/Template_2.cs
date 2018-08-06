@@ -10,17 +10,16 @@ namespace GifTag.Api.Points
         public override PointF FromName => new PointF(500f, 100f);
         public override PointF ToName => new PointF(500f, 150f);
 
-        public override PointF AirlineName { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public override PointF FlightDate => throw new System.NotImplementedException();
 
-        public override PointF FromCode => throw new System.NotImplementedException();
+        public override PointF BoardingTime => throw new System.NotImplementedException();
 
-        public override PointF ToCode => throw new System.NotImplementedException();
+        public override PointF FlightNumber => throw new System.NotImplementedException();
 
-        public override PointF FlightDate { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public override PointF BoardingTime { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public override PointF FlightNumber { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public override PointF Gate { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public override PointF Seat { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public override PointF Class { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public override PointF Gate => throw new System.NotImplementedException();
+
+        public override PointF Seat => throw new System.NotImplementedException();
+
+        public override PointF Class => throw new System.NotImplementedException();
     }
 }
