@@ -29,6 +29,7 @@ public class TicketService : ITicketService
             using (Font arialFont = new Font("Arial", 16))
             {
                 TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Name);
+                TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.BoardingTime);
                 TryDrawingThePoint(graphics, ticket.FirstName, arialFont, points.FirstName);
                 TryDrawingThePoint(graphics, ticket.LastName, arialFont, points.LastName);
                 TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.FromName);
@@ -39,7 +40,6 @@ public class TicketService : ITicketService
                 TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Seat);
                 TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Class);
                 TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.ToName);
-                TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.BoardingTime);
 
                 TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Side_Class);
                 TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.Side_FlightDate);

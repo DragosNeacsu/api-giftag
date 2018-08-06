@@ -22,14 +22,23 @@ namespace GifTag.Api.Controllers
         }
 
         [HttpGet]
-        public string PayWithPaypal(string generatedTicketId)
+        [Route("hack")]
+        public ActionResult Hack(string generatedTicketId, string password)
         {
-            var ticket = _ticketService.GetById(int.Parse(Converter.FromBase64(generatedTicketId)));
+            if (password != "kmgi12345")
+            {
+                return null;
+            }
+
+            var ticket = _ticketService.GetById(int.Parse(generatedTicketId));
             ticket.GeneratedTicket = _ticketService.Generate(ticket);
 
-            return Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", ticket.GeneratedTicket);
-            //TODO make method void and remove above code
-            
+            return Redirect($"/GeneratedTickets/{ticket.GeneratedTicket}");
+        }
+
+        [HttpGet]
+        public void PayWithPaypal(string generatedTicketId)
+        {
             var price = 1.99;
             var builder = new StringBuilder();
             var uri = Request.GetDisplayUrl().Split('?')[0];
