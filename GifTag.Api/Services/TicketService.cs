@@ -4,6 +4,7 @@ using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Reflection;
 
 public class TicketService : ITicketService
 {
@@ -25,18 +26,20 @@ public class TicketService : ITicketService
 
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
-            using (Font arialFont = new Font("Arial", 10))
+            using (Font arialFont = new Font("Arial", 16))
             {
-                graphics.DrawString(ticket.FirstName, arialFont, Brushes.Black, points.FirstName);
-                graphics.DrawString(ticket.LastName, arialFont, Brushes.Black, points.LastName);
-                graphics.DrawString(ticket.FromName, arialFont, Brushes.Black, points.FromName);
-                graphics.DrawString(ticket.BoardingTime, arialFont, Brushes.Black, points.BoardingTime);
-                graphics.DrawString(ticket.FlightDate, arialFont, Brushes.Black, points.FlightDate);
-                graphics.DrawString(ticket.FlightNumber, arialFont, Brushes.Black, points.FlightNumber);
-                graphics.DrawString(ticket.Gate, arialFont, Brushes.Black, points.Gate);
-                graphics.DrawString(ticket.Seat, arialFont, Brushes.Black, points.Seat);
-                graphics.DrawString(ticket.Class, arialFont, Brushes.Black, points.Class);
-                graphics.DrawString(ticket.ToName, arialFont, Brushes.Black, points.ToName);
+                foreach (PropertyInfo propertyInfo in points.GetType().GetProperties())
+                {
+                    try
+                    {
+                        graphics.DrawString(
+                            GetPropValue(ticket, propertyInfo.Name).ToString(), 
+                            arialFont, 
+                            Brushes.Black,
+                            (PointF)propertyInfo.GetValue(points));
+                    }
+                    catch { }
+                }
             }
         }
 
@@ -46,6 +49,10 @@ public class TicketService : ITicketService
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
         bitmap.Save(filePath, ImageFormat.Png);
         return fileName;
+    }
+    private static object GetPropValue(object src, string propName)
+    {
+        return src.GetType().GetProperty(propName).GetValue(src, null);
     }
 
     public Ticket GetById(int ticketId)

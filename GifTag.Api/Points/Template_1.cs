@@ -12,9 +12,9 @@ namespace GifTag.Api.Points
         public override PointF FlightDate => new PointF(440, 360);
         public override PointF BoardingTime => new PointF(740, 360);
         public override PointF FlightNumber => new PointF(112, 360);
-        public override PointF Gate => new PointF(500f, 150f);
         public override PointF Seat => new PointF(1180, 360);
         public override PointF Class => new PointF(1032, 360);
+        public override PointF Gate => throw new System.NotImplementedException();
     }
 }
 //time 740 * 360
