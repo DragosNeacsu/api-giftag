@@ -28,31 +28,68 @@ public class TicketService : ITicketService
         {
             using (Font arialFont = new Font("Arial", 16))
             {
-                foreach (PropertyInfo propertyInfo in points.GetType().GetProperties())
-                {
-                    try
-                    {
-                        graphics.DrawString(
-                            GetPropValue(ticket, propertyInfo.Name).ToString(), 
-                            arialFont, 
-                            Brushes.Black,
-                            (PointF)propertyInfo.GetValue(points));
-                    }
-                    catch { }
-                }
+                TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Name);
+                TryDrawingThePoint(graphics, ticket.FirstName, arialFont, points.FirstName);
+                TryDrawingThePoint(graphics, ticket.LastName, arialFont, points.LastName);
+                TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.FromName);
+                TryDrawingThePoint(graphics, ticket.FlightTime, arialFont, points.FlightTime);
+                TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.FlightDate);
+                TryDrawingThePoint(graphics, ticket.FlightNumber, arialFont, points.FlightNumber);
+                TryDrawingThePoint(graphics, ticket.Gate, arialFont, points.Gate);
+                TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Seat);
+                TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Class);
+                TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.ToName);
+                TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.BoardingTime);
+
+                TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Side_Class);
+                TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.Side_FlightDate);
+                TryDrawingThePoint(graphics, ticket.FlightTime, arialFont, points.Side_FlightTime);
+                TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.Side_FromName);
+                TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Side_Name);
+                TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Side_Seat);
+                TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.Side_ToName);
             }
         }
 
-        bitmap = AddAirlineLogo(bitmap, ticket, points.AirlineLogo);
+        if (points.AirlineLogo != null)
+        {
+            bitmap = AddAirlineLogo(bitmap, ticket, points.AirlineLogo.Value);
+        }
 
         var fileName = $"{Guid.NewGuid()}.png";
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
         bitmap.Save(filePath, ImageFormat.Png);
         return fileName;
     }
+
+    private string GetFullName(Ticket ticket) {
+        return $"{ticket.FirstName} {ticket.LastName}";
+    }
+    private void TryDrawingThePoint(Graphics graphics, string field, Font arialFont, PointF? point)
+    {
+        if (point != null)
+        {
+            try
+            {
+                graphics.DrawString(field, arialFont, Brushes.Black, point.Value);
+            }
+            catch { }
+        }
+    }
+
     private static object GetPropValue(object src, string propName)
     {
         return src.GetType().GetProperty(propName).GetValue(src, null);
+    }
+    private string GetBoardingTime(string flightTime)
+    {
+        if (!string.IsNullOrEmpty(flightTime))
+        {
+            var date = DateTime.Parse(flightTime, System.Globalization.CultureInfo.CurrentCulture);
+
+            return date.AddMinutes(-40).ToString("HH:mm");
+        }
+        return string.Empty;
     }
 
     public Ticket GetById(int ticketId)
