@@ -26,43 +26,57 @@ public class TicketService : ITicketService
 
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
-            using (Font arialFont = new Font("Arial", 16))
-            {
-                TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Name);
-                TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.BoardingTime);
-                TryDrawingThePoint(graphics, ticket.FirstName, arialFont, points.FirstName);
-                TryDrawingThePoint(graphics, ticket.LastName, arialFont, points.LastName);
-                TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.FromName);
-                TryDrawingThePoint(graphics, ticket.FlightTime, arialFont, points.FlightTime);
-                TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.FlightDate);
-                TryDrawingThePoint(graphics, ticket.FlightNumber, arialFont, points.FlightNumber);
-                TryDrawingThePoint(graphics, ticket.Gate, arialFont, points.Gate);
-                TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Seat);
-                TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Class);
-                TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.ToName);
+            Font arialFont = new Font("Arial", 24);
 
-                TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Side_Class);
-                TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.Side_FlightDate);
-                TryDrawingThePoint(graphics, ticket.FlightTime, arialFont, points.Side_FlightTime);
-                TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.Side_FromName);
-                TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Side_Name);
-                TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Side_Seat);
-                TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.Side_ToName);
-            }
+            TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Name);
+            TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.BoardingTime);
+            TryDrawingThePoint(graphics, ticket.FirstName, arialFont, points.FirstName);
+            TryDrawingThePoint(graphics, ticket.LastName, arialFont, points.LastName);
+            TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.FromName);
+            TryDrawingThePoint(graphics, ticket.FlightTime, arialFont, points.FlightTime);
+            TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.FlightDate);
+            TryDrawingThePoint(graphics, ticket.FlightNumber, arialFont, points.FlightNumber);
+            TryDrawingThePoint(graphics, ticket.Gate, arialFont, points.Gate);
+            TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Seat);
+            TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Class);
+            TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.ToName);
+            TryDrawingThePoint(graphics, ticket.FromCode, arialFont, points.FromCode);
+            TryDrawingThePoint(graphics, ticket.ToCode, arialFont, points.ToCode);
+
+            TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Side_Name);
+            TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.Side_BoardingTime);
+            TryDrawingThePoint(graphics, ticket.FirstName, arialFont, points.Side_FirstName);
+            TryDrawingThePoint(graphics, ticket.LastName, arialFont, points.Side_LastName);
+            TryDrawingThePoint(graphics, ticket.FromName, arialFont, points.Side_FromName);
+            TryDrawingThePoint(graphics, ticket.FlightTime, arialFont, points.Side_FlightTime);
+            TryDrawingThePoint(graphics, ticket.FlightDate, arialFont, points.Side_FlightDate);
+            TryDrawingThePoint(graphics, ticket.FlightNumber, arialFont, points.Side_FlightNumber);
+            TryDrawingThePoint(graphics, ticket.Gate, arialFont, points.Side_Gate);
+            TryDrawingThePoint(graphics, ticket.Seat, arialFont, points.Side_Seat);
+            TryDrawingThePoint(graphics, ticket.Class, arialFont, points.Side_Class);
+            TryDrawingThePoint(graphics, ticket.ToName, arialFont, points.Side_ToName);
+            TryDrawingThePoint(graphics, ticket.FromCode, arialFont, points.Side_FromCode);
+            TryDrawingThePoint(graphics, ticket.ToCode, arialFont, points.Side_ToCode);
+
+            arialFont.Dispose();
         }
 
         if (points.AirlineLogo != null)
         {
             bitmap = AddAirlineLogo(bitmap, ticket, points.AirlineLogo.Value);
         }
-
+        if (points.Side_AirlineLogo != null)
+        {
+            bitmap = AddAirlineLogo(bitmap, ticket, points.Side_AirlineLogo.Value);
+        }
         var fileName = $"{Guid.NewGuid()}.png";
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
         bitmap.Save(filePath, ImageFormat.Png);
         return fileName;
     }
 
-    private string GetFullName(Ticket ticket) {
+    private string GetFullName(Ticket ticket)
+    {
         return $"{ticket.FirstName} {ticket.LastName}";
     }
     private void TryDrawingThePoint(Graphics graphics, string field, Font arialFont, PointF? point)

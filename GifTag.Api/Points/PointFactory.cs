@@ -6,9 +6,9 @@
         {
             switch (template)
             {
-                case "template_1":
+                case "boarding-pass-1.jpg":
                     return new Template_1();
-                case "template_2":
+                case "boarding-pass-2.jpg":
                     return new Template_2();
                 case "template_3":
                     return new Template_3();

@@ -10,6 +10,8 @@ namespace GifTag.Api.Points
         public override PointF? LastName => null;
         public override PointF? FromName => new PointF(112, 500);
         public override PointF? ToName => new PointF(740, 500);
+        public override PointF? FromCode => null;
+        public override PointF? ToCode => null;
         public override PointF? FlightDate => new PointF(440, 360);
         public override PointF? FlightTime => new PointF(740, 360);
         public override PointF? FlightNumber => new PointF(112, 360);
@@ -26,6 +28,14 @@ namespace GifTag.Api.Points
         public override PointF? Side_ToName => new PointF(1716, 492);
         public override PointF? Side_FlightDate => new PointF(1533, 584);
         public override PointF? Side_FlightTime => new PointF(1720, 584);
+        public override PointF? Side_AirlineLogo => null;
+        public override PointF? Side_FirstName => null;
+        public override PointF? Side_LastName => null;
+        public override PointF? Side_FromCode => null;
+        public override PointF? Side_ToCode => null;
+        public override PointF? Side_BoardingTime => null;
+        public override PointF? Side_FlightNumber => null;
+        public override PointF? Side_Gate => null;
         #endregion
     }
 }
