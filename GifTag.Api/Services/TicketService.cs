@@ -34,7 +34,7 @@ public class TicketService : ITicketService
             }
         }
 
-        bitmap = AddAirlineLogo(bitmap, ticket, points.Logo);
+        bitmap = AddAirlineLogo(bitmap, ticket, points.AirlineLogo);
 
         var fileName = $"{Guid.NewGuid()}.png";
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Content", "GeneratedTickets", fileName);
