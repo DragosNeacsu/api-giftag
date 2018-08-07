@@ -10,5 +10,6 @@ public class Settings
     public static string FromEmail { get; set; }
     public static string SendGridKey { get; set; }
     public static string UiUrl { get; set; }
+    public static bool IsPaypalLive { get; internal set; }
 }
 

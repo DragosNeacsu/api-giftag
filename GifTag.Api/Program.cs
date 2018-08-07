@@ -31,9 +31,17 @@ namespace ApiGifTag
 
         private static void BuildAppSettings()
         {
-            Settings.PaypalUrl = Configuration["PaypalUrl"];
-            Settings.PaypalEmail = Configuration["PaypalEmail"];
-            Settings.PaypalAuthToken = Configuration["PaypalAuthToken"];
+            Settings.IsPaypalLive = bool.Parse(Configuration["IsPaypalLive"]);
+            Settings.PaypalUrl = Configuration["Live_PaypalUrl"];
+            Settings.PaypalEmail = Configuration["Live_PaypalEmail"];
+            Settings.PaypalAuthToken = Configuration["Live_PaypalAuthToken"];
+
+            if (!Settings.IsPaypalLive) {
+                Settings.PaypalUrl = Configuration["Sandbox_PaypalUrl"];
+                Settings.PaypalEmail = Configuration["Sandbox_PaypalEmail"];
+                Settings.PaypalAuthToken = Configuration["Sandbox_PaypalAuthToken"];
+            }
+
             Settings.FromName = Configuration["FromName"];
             Settings.FromEmail = Configuration["FromEmail"];
             Settings.SendGridKey = Configuration["SendGridKey"];

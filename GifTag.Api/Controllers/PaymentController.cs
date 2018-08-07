@@ -39,7 +39,7 @@ namespace GifTag.Api.Controllers
         [HttpGet]
         public void PayWithPaypal(string generatedTicketId)
         {
-            var price = 1.99;
+            var price = 0.01;
             var builder = new StringBuilder();
             var uri = Request.GetDisplayUrl().Split('?')[0];
             builder.Append(Settings.PaypalUrl);
