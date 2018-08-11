@@ -26,7 +26,7 @@ public class TicketService : ITicketService
 
         using (Graphics graphics = Graphics.FromImage(bitmap))
         {
-            Font arialFont = new Font("Arial", 24);
+            Font arialFont = new Font("Gill Sans Nova", 24);
 
             TryDrawingThePoint(graphics, GetFullName(ticket), arialFont, points.Name);
             TryDrawingThePoint(graphics, GetBoardingTime(ticket.FlightTime), arialFont, points.BoardingTime);
